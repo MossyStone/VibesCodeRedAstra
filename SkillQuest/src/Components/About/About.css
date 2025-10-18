@@ -1,0 +1,32 @@
+.about{
+    margin: 100px auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+}
+
+.about-left{
+    flex-basis: 40%;
+    position: relative;
+}
+
+.about-right{
+    flex-basis: 56%;
+}
+
+.about-img{
+    width: 100%;
+    border-radius: 15px;
+}
+
+.about h3{
+    font-size: 22px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.about p{
+    font-size: 18px;
+    text-align: center;
+}
