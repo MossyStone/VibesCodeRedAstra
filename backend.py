@@ -1,13 +1,19 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import requests
+import json
+import random
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app=Flask(__name__)
 CORS(app) #for frontend to talk with backend
 
 #API keys (get keys from website later)
-GEMINI_API_KEY="your key here"
-ELEVENLABS_API_KEY="your key here"
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
+ELEVENLABS_API_KEY = os.getenv('ELEVENLABS_API_KEY')
 
 user_progress={
   "score":0,
@@ -18,33 +24,116 @@ user_progress={
 @app.route('/')
 def home():
   return "SkillQuest Backend Is Running!"
+  
+
+def call_gemini(prompt):
+  #Call Gemini API to generate a question
+  url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
+
+  headers={
+    "Content-Type": "application/json"
+  }
+  data={
+    "contents":[{
+      "parts":[{
+        "text": prompt
+      }]
+    }]
+  }
+
+  try:
+    print("Calling Gemini API...")
+    response=requests.post(url, json=data, headers=headers)
+    response.raise_for_status()
+
+    result=response.json()
+    print(f"Gemini response: {result}")
+    generated_text=result['candidates'][0]['content']['parts'][0]['text']
+    return generated_text
+  except Exception as e:
+    print(f"Gemini API error: {e}")
+    return None
+
 
 @app.route('/api/generate-quest', methods=['POST'])
 def generate_quest():
   #get what user wants to learn
   data=request.json
   topic=data.get('topic', 'Python')
+  difficulty=data.get('difficulty', 'beginner')
 
-  #returning fake data for now. replace with real API later
-  try:
-    prompt=f"Create a beginner programming quiz question about {topic}. Return as JSON with 'question', 'options' (array of 4 choices), 'correct' (index 0-3), and 'hint'"
-    # You'll need to add Gemini API call here later
-    # For now, still use fake data
-    fake_quest={
-      "question":f"What is a variable in {topic}?",
-      "options": ["A storage box", "A function", "A loop", "A button"],
-      "correct":0,
-      "hint": "Think of it like a container"
+  prompt = f"""Create a {difficulty} multiple choice question about {topic} programming.
+    
+  Return ONLY valid JSON in this exact format with no other text:
+  {{
+    "question": "Your question here",
+    "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
+    "correct": 0,
+    "hint": "A helpful hint",
+    "explanation": "Why this answer is correct"
+  }}
+    
+  Make sure:
+  - The question is clear and educational
+  - All 4 options are plausible
+  - correct is the index (0-3) of the correct answer
+  - The hint doesn't give away the answer directly
+  """
+
+  gemini_response = call_gemini(prompt)
+
+  if gemini_response:
+    try:
+      # Try to parse the JSON from Gemini
+      # Clean the response (remove markdown if any)
+      cleaned = gemini_response.strip()
+      if cleaned.startswith("```json"):
+        cleaned = cleaned[7:]  # Remove ```json
+      if cleaned.startswith("```"):
+        cleaned = cleaned[3:]  # Remove ```
+      if cleaned.endswith("```"):
+        cleaned = cleaned[:-3]  # Remove closing ```
+            
+      quest_data = json.loads(cleaned)
+      return jsonify(quest_data)
+            
+    except json.JSONDecodeError:
+      print("Failed to parse Gemini response as JSON")
+      #fall through to backup questions
+
+  backup_questions = [
+    {
+      "question": f"What is a variable in {topic}?",
+      "options": ["A storage container for data", "A type of loop", "A function", "An error message"],
+      "correct": 0,
+      "hint": "Think about storing information",
+      "explanation": "A variable is like a container that holds data in your program"
+    },
+    {
+      "question": f"Which of these is used to repeat code in {topic}?",
+      "options": ["Loop", "Variable", "Comment", "Semicolon"],
+      "correct": 0,
+      "hint": "It goes round and round",
+      "explanation": "Loops allow you to repeat code multiple times"
+    },
+    {
+      "question": f"What does debugging mean in {topic}?",
+      "options": ["Finding and fixing errors", "Writing new code", "Deleting files", "Installing software"],
+      "correct": 0,
+      "hint": "Like a detective finding problems",
+      "explanation": "Debugging is the process of finding and fixing errors in code"
     }
-    return jsonify(fake_quest)
-  except:
-    return jsonify(fake_quest)
+  ]
+
+  return jsonify(random.choice(backup_questions))
+
+
 
 @app.route('/api/check-answer', methods=['POST'])
 def check_answer():
   data=request.json
-  user_answer=data.get('answer')
-  correct_answer=data.get('correct')
+  user_answer=int(data.get('answer'))
+  correct_answer=int(data.get('correct'))
 
   if user_answer==correct_answer:
     return jsonify({"result": "Correct!", "points":10})
