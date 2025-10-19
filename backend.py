@@ -30,6 +30,68 @@ def get_user_progress():
     }
   return session['progress']
 
+def validate_quest_input(data):
+    """Validate input for generate-quest endpoint"""
+    if not data:
+        return False, "No data provided"
+    
+    topic = data.get('topic', '')
+    difficulty = data.get('difficulty', '')
+    
+    # Validate topic
+    if not topic or not isinstance(topic, str):
+        return False, "Invalid topic"
+    
+    if len(topic) > 50:
+        return False, "Topic too long (max 50 characters)"
+    
+    # Validate difficulty
+    valid_difficulties = ['beginner', 'intermediate', 'advanced']
+    if difficulty and difficulty not in valid_difficulties:
+        return False, f"Invalid difficulty. Must be one of: {', '.join(valid_difficulties)}"
+    
+    return True, None
+
+
+def validate_answer_input(data):
+    """Validate input for check-answer endpoint"""
+    if not data:
+        return False, "No data provided"
+    
+    try:
+        user_answer = int(data.get('answer'))
+        correct_answer = int(data.get('correct'))
+    except (TypeError, ValueError):
+        return False, "Answer and correct must be valid integers"
+    
+    # Answers should be 0-3 (indices for multiple choice)
+    if not (0 <= user_answer <= 3):
+        return False, "Answer must be between 0 and 3"
+    
+    if not (0 <= correct_answer <= 3):
+        return False, "Correct answer must be between 0 and 3"
+    
+    return True, None
+
+
+def validate_progress_input(data):
+    """Validate input for update-progress endpoint"""
+    if not data:
+        return False, "No data provided"
+    
+    try:
+        points = int(data.get('points', 0))
+    except (TypeError, ValueError):
+        return False, "Points must be a valid integer"
+    
+    if points < 0:
+        return False, "Points cannot be negative"
+    
+    if points > 100:
+        return False, "Points too high (max 100 per request)"
+    
+    return True, None
+
 @app.route('/')
 def home():
   return "SkillQuest Backend Is Running!"
@@ -68,6 +130,11 @@ def call_gemini(prompt):
 def generate_quest():
   #get what user wants to learn
   data=request.json
+
+  is_valid, error_message = validate_quest_input(data)
+  if not is_valid:
+    return jsonify({"error": error_message}), 400
+
   topic=data.get('topic', 'Python')
   difficulty=data.get('difficulty', 'beginner')
 
@@ -141,6 +208,11 @@ def generate_quest():
 @app.route('/api/check-answer', methods=['POST'])
 def check_answer():
   data=request.json
+
+  is_valid, error_message = validate_answer_input(data)
+  if not is_valid:
+    return jsonify({"error": error_message}), 400
+
   user_answer=int(data.get('answer'))
   correct_answer=int(data.get('correct'))
 
@@ -179,6 +251,11 @@ def get_progress():
 @app.route('/api/update-progress', methods=['POST'])
 def update_progress():
   data=request.json
+
+  is_valid, error_message = validate_progress_input(data)
+  if not is_valid:
+    return jsonify({"error": error_message}), 400
+
   progress=get_user_progress()
 
   progress["score"] += data.get("points", 0)
