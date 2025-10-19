@@ -1,5 +1,6 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, session
 from flask_cors import CORS
+from flask_session import Session
 import requests
 import json
 import random
@@ -9,17 +10,25 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app=Flask(__name__)
-CORS(app) #for frontend to talk with backend
+CORS(app, supports_credentials=True) #for frontend to talk with backend
+
+app.config['SECRET_KEY'] = 'snail'
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SESSION_PERMANENT'] = False
+Session(app)
 
 #API keys (get keys from website later)
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 ELEVENLABS_API_KEY = os.getenv('ELEVENLABS_API_KEY')
 
-user_progress={
-  "score":0,
-  "level":1,
-  "completed_quests":[]
-}
+def get_user_progress():
+  if 'progress' not in session:
+    session['progress']={
+      "score":0,
+      "level":1,
+      "completed_quests":[]
+    }
+  return session['progress']
 
 @app.route('/')
 def home():
@@ -164,15 +173,20 @@ def get_all_quests(topic):
 
 @app.route('/api/progress')
 def get_progress():
-  return jsonify(user_progress)
+  progress=get_user_progress()
+  return jsonify(progress)
 
 @app.route('/api/update-progress', methods=['POST'])
 def update_progress():
   data=request.json
-  user_progress["score"]+=data.get("points",0)
-  
-  user_progress["level"]= (user_progress["score"]//50)+1
-  return jsonify(user_progress)
+  progress=get_user_progress()
+
+  progress["score"] += data.get("points", 0)
+  progress["level"] = (progress["score"] // 50) + 1
+
+  session['progress'] = progress  # Save back to session
+
+  return jsonify(progress)
 
 
 if __name__=='__main__':
