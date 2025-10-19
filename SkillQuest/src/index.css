@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+*{
+    font-family: "Cormorant", serif;
+    font-weight: normal;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background-color: #C9C9C9;
+    margin: 0;
+    padding: 0;
+}
+
+html, body, #root {
+    width: 100%;
+}
+
+a{
+    color:inherit;
+    text-decoration: none;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.container{
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+.btn{
+    background: white;
+    color: black;
+    padding: 1em 2em;
+    font-size: medium;
+    border-radius: 40px;
+    cursor: pointer;
+    border: 0;
+    outline: 0;
+}
