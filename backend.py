@@ -10,7 +10,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app=Flask(__name__)
-CORS(app, supports_credentials=True) #for frontend to talk with backend
+CORS(app, supports_credentials=True, origins=['https://*.app.github.dev',
+    'http://localhost:5173',
+    'https://automatic-computing-machine-5gvgqj79j4x627q44-5173.app.github.dev']) #for frontend to talk with backend
 
 app.config['SECRET_KEY'] = 'snail'
 app.config['SESSION_TYPE'] = 'filesystem'
