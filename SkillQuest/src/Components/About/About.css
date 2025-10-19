@@ -26,6 +26,13 @@
     font-weight: bold;
 }
 
+.about h4{
+    font-size: 20px;
+    text-align: center;
+    color: #071753;
+    font-weight: bold;
+}
+
 .about p{
     font-size: 18px;
     text-align: center;

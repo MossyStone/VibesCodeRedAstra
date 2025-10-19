@@ -4,6 +4,7 @@ import { NavBar } from './Components/NavBar/NavBar'
 import { Hero } from './Components/Hero/Hero'
 import { Demo } from './Components/Demo/Demo'
 import { About } from './Components/About/About'
+import { Testimonials } from './Components/Testimonials/Testimonials'
 
 const App = () => {
   return(
@@ -12,7 +13,7 @@ const App = () => {
      <Hero/>
      <About/>
      <Demo/>
-     
+     <Testimonials/>
       
     </div>
   )
