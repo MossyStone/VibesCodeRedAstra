@@ -29,7 +29,7 @@ export const Testimonials = () => {
   ];
 
   return (
-    <div className='test'>
+    <div className='test' id='testimonials'>
         <h4>About Developers</h4>
         <div className="testimonials-grid">
           {testimonials.map((testimonial, index) => (
