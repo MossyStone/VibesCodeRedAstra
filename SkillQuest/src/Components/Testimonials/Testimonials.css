@@ -3,12 +3,21 @@
     padding: 0px 80px;
     position: relative;
 }
-.test h4{
+.test h3{
     font-size: 20px;
     text-align: center;
     color: #071753;
     font-weight: bold;
-    margin-bottom: 40px;
+    margin-bottom: 2px;
+    padding-bottom: 50px;
+}
+
+.test h4{
+   font-size: 40px;
+    text-align: center;
+    color: #071753;
+    font-weight: bold;
+    margin-bottom: 30px;
 }
 .testimonials-grid{
     display: grid;

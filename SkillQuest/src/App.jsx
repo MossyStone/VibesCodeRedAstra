@@ -5,6 +5,7 @@ import { Hero } from './Components/Hero/Hero'
 import { Demo } from './Components/Demo/Demo'
 import { About } from './Components/About/About'
 import { Testimonials } from './Components/Testimonials/Testimonials'
+import { Footer } from './Components/Footer/Footer'
 
 const App = () => {
   return(
@@ -12,8 +13,9 @@ const App = () => {
      <NavBar/>
      <Hero/>
      <About/>
-     <Demo/>
      <Testimonials/>
+     <Demo/>
+     <Footer/>
       
     </div>
   )

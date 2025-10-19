@@ -16,10 +16,9 @@ export const NavBar = () => {
         <img src={logo} alt="SkillQuest Logo" className='logo' ></img>
         <ul>
             <li><button className='btn'>Home</button></li>
+            <li><button className='btn'>About Project</button></li>
+            <li><button className='btn'>About Deves</button></li>
             <li><button className='btn'>Demo</button></li>
-            <li><button className='btn'>About Us</button></li>
-            <li><button className='btn'>Testimonials</button></li>
-            <li><button className='btn'>Contact Us</button></li>
         </ul>
     </nav>
   )
