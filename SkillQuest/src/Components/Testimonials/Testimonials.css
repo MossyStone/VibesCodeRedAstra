@@ -9,7 +9,7 @@
     color: #071753;
     font-weight: bold;
     margin-bottom: 2px;
-    padding-bottom: 50px;
+    padding-bottom: 10px;
 }
 
 .test h4{
@@ -19,6 +19,7 @@
     font-weight: bold;
     margin-bottom: 30px;
 }
+
 .testimonials-grid{
     display: grid;
     grid-template-columns: 1fr 1fr;

@@ -9,22 +9,22 @@ export const Testimonials = () => {
     {
       name: "Ayodeji Agboola",
       title: "A UH Student",
-      text: "Insert stuff did"
+      text: "Established the ElevenLabs API"
     },
     {
       name: "Madison Reynolds",
       title: "A UHCL Student",
-      text: "Insert stuff did"
+      text: "Created the webpage"
     },
     {
       name: "Wyatt Rios",
       title: "A UHCL Student",
-      text: "Insert stuff did"
+      text: "Established the Gemini API and connections"
     },
     {
       name: "Payam Vakili",
       title: "A UH Student",
-      text: "Insert stuff did"
+      text: "Developed the backend and connected Gemini to the backend."
     }
   ];
 
