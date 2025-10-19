@@ -143,12 +143,12 @@ skillquest/
 
 ## Team
 
-| Member        | Role                            | Skills                               |
-| ------------- | ------------------------------- | ------------------------------------ |
-| Madison       | Project Manager / Frontend Lead | JS, HTML/CSS, C#, Project Management |
-| Team Member 1 | Game Logic / API Integration    | C++, Python, SQL, Game Dev           |
-| Team Member 2 | AI & Backend Developer          | Python, C++, Gemini Integration      |
-| Team Member 3 | Backend / Voice Integration     | Java, Python, ElevenLabs API         |
+| Member           | Role                                   | Skills                               |
+| ---------------- | -------------------------------------- | ------------------------------------ |
+| Madison Reynolds | Project Manager / Frontend Lead        | JS, HTML/CSS, C#, Project Management |
+| Payam Vakili     | Game Logic / API Integration / Backend | C++, Python, SQL, Game Dev           |
+| Wyatt Rios       | AI & Backend                           | Python, C++, Gemini Integration      |
+| Ayodeji Agboola  | Backend / Voice Integration            | Java, Python, ElevenLabs API         |
 
 ---
 
